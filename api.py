@@ -19,7 +19,7 @@ def obter_noticias(pesquisa=""):
         # Notícias de Angola quando não houver pesquisa
         url = (
             f"https://gnews.io/api/v4/search?"
-            f"q=Angola"
+            f"q=Angola OR Portugal OR Brazil"
             f"&lang=pt"
             f"&max=20"
             f"&apikey={API_KEY}"
