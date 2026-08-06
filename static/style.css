@@ -1,7 +1,6 @@
 /* ===========================
    RESET
 =========================== */
-
 *{
     margin:0;
     padding:0;
@@ -53,6 +52,10 @@ body{
 /* ===========================
    PESQUISA
 =========================== */
+.notificacao{
+  margin-left: 20px;
+  color:white;
+}
 
 .user-aba{
     background:#181818;
@@ -73,7 +76,7 @@ body{
 
 .user-nav input{
     flex:1;
-    padding:10px;
+    padding:15px;
     border:none;
     outline:none;
     border-radius:25px;
