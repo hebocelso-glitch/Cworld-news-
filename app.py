@@ -17,7 +17,10 @@ def inicio():
         noticias=noticias,
         pesquisa=pesquisa
     )
-
+#barra de pesquisa 
+@app.route('/pesquisar')
+def  pesquisar():
+	return render_template('pesquisar.html')
 
 # API para o JavaScript (fetch)
 @app.route("/api/noticias")
