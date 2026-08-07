@@ -22,7 +22,7 @@
 
 
   <p class="text">Os resultados aparevem aqui</p>
-  
+    <div id="feed"> 
         {% for noticia in noticias %}
         <div class="card">
 
@@ -89,7 +89,9 @@
 
         </div>
 {% endfor %}
+    </div>
 
+  
 </body>
   <script src="{{ url_for('static', filename='pesq.js') }}"></script>
 </html>

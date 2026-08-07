@@ -81,6 +81,7 @@ if (pesquisa && feed) {
             const noticias = await resposta.json();
 
             feed.innerHTML = "";
+          //alterar isso aqui !
 
             noticias.forEach((noticia) => {
 
@@ -130,3 +131,11 @@ if (pesquisa && feed) {
     });
 
 }
+// Expandir e recolher descrição
+document.querySelectorAll(".descricao").forEach((descricao) => {
+
+    descricao.addEventListener("click", () => {
+        descricao.classList.toggle("aberta");
+    });
+
+});

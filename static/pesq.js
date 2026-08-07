@@ -1,83 +1,105 @@
-const form = document.querySelector(".busca");
-const input = document.getElementById("pesquisa");
-const resultado = document.querySelector(".resultado");
 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// ===============================
+// BOTÃO CURTIR
+// ===============================
 
-    const pesquisa = input.value.trim();
+function ativarCurtir() {
 
-    const resposta = await fetch(`/api/noticias?q=${encodeURIComponent(pesquisa)}`);
-    const noticias = await resposta.json();
+    document.querySelectorAll(".like-btn").forEach((btn) => {
 
-    resultado.innerHTML = "";
+        btn.onclick = () => {
 
-    if (noticias.length === 0) {
-        resultado.innerHTML = "<p>Nenhuma notícia encontrada.</p>";
-        return;
-    }
+            btn.classList.toggle("liked");
 
-    noticias.forEach(noticia => {
-        resultado.innerHTML += `
-            <div class="noticia">
-                ${noticia.image ? `<img src="${noticia.image}" alt="">` : ""}
-                <h3>${noticia.title}</h3>
-                <p>${noticia.description || ""}</p>
-                <a href="${noticia.url}" target="_blank">Ler mais</a>
-            </div>
-        `;
+            const texto = btn.querySelector("span");
+
+            texto.textContent = btn.classList.contains("liked")
+                ? "Curtido"
+                : "Curtir";
+
+        };
+
     });
-});
-resultado.innerHTML += `
-<div class="card">
 
-    <h2>${noticia.title}</h2>
+}
 
-    <img class="noticia" src="${noticia.image}" alt="">
+ativarCurtir();
 
-    <p>${noticia.description || ""}</p>
 
-    <a class="ler-mais" href="${noticia.url}" target="_blank">
-        Ler mais
-    </a>
+// ===============================
+// PESQUISA DE NOTÍCIAS
+// ===============================
 
-    <div class="card-actions">
+const pesquisa = document.getElementById("pesquisa");
+const feed = document.getElementById("feed");
 
-        <button class="action-btn like-btn">
+if (pesquisa && feed) {
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/>
-            </svg>
+    pesquisa.addEventListener("keydown", async (e) => {
 
-            <span>Curtir</span>
+        if (e.key !== "Enter") return;
 
-        </button>
+        e.preventDefault();
 
-        <button class="action-btn">
+        const texto = pesquisa.value.trim();
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-            </svg>
+        if (texto === "") return;
 
-            <span>Comentar</span>
+        try {
 
-        </button>
+            const resposta = await fetch(
+                `/api/noticias?q=${encodeURIComponent(texto)}`
+            );
 
-        <button class="action-btn">
+            const noticias = await resposta.json();
 
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="18" cy="5" r="3"/>
-                <circle cx="6" cy="12" r="3"/>
-                <circle cx="18" cy="19" r="3"/>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
+            feed.innerHTML = "";
 
-            <span>Compartilhar</span>
+            noticias.forEach((noticia) => {
 
-        </button>
+                feed.innerHTML += `
+                    <div class="card">
 
-    </div>
+                        <h2>${noticia.title}</h2>
 
-</div>
-`;
+                        <img
+                            class="noticia"
+                            src="${noticia.image}"
+                            alt="${noticia.title}"
+                        >
+
+                        <p>${noticia.description || ""}</p>
+
+                        <div class="card-actions">
+
+                            <button class="action-btn like-btn">
+                                <span>Curtir</span>
+                            </button>
+
+                            <button class="action-btn">
+                                <span>Comentar</span>
+                            </button>
+
+                            <button class="action-btn">
+                                <span>Compartilhar</span>
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            });
+
+            // Reativa o botão Curtir nos novos cards
+            ativarCurtir();
+
+        } catch (erro) {
+
+            console.error("Erro ao buscar notícias:", erro);
+
+        }
+
+    });
+
+}
