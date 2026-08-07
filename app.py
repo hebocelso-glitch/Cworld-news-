@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify,session
 from api import obter_noticias
-
+from banco import adicionar_like, buscar_likes
+import sqlite3
 app = Flask(__name__)
-
+app.secret_key = "young_dark_2026_secret_key_flask_app"
 
 # Página inicial
 @app.route("/")
@@ -31,6 +32,28 @@ def api_noticias():
     noticias = obter_noticias(pesquisa)
 
     return jsonify(noticias)
+#Os likes
+@app.route("/like", methods=["POST"])
+def like():
+
+    dados = request.get_json()
+
+    noticia_id = dados.get("noticia_id")
+
+    if "likes" not in session:
+        session["likes"] = []
+
+    if noticia_id not in session["likes"]:
+
+        adicionar_like(noticia_id)
+
+        session["likes"].append(noticia_id)
+
+        session.modified = True
+
+    return jsonify({
+        "likes": buscar_likes(noticia_id)
+    })
 
 
 if __name__ == "__main__":

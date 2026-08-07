@@ -1,3 +1,4 @@
+from banco import buscar_likes
 import requests
 from datetime import datetime
 import re
@@ -75,5 +76,5 @@ def obter_noticias(pesquisa=""):
 
             except Exception:
                 noticia["data"] = noticia["publishedAt"]
-
+        noticia["likes"] = buscar_likes(noticia["url"])
     return noticias
