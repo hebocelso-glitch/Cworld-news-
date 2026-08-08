@@ -295,3 +295,46 @@ if (local) {
     });
 
 }
+//partilhar as noticias
+// ===============================
+// COMPARTILHAR
+// ===============================
+
+document.querySelectorAll(".share-btn").forEach(function(button) {
+
+    button.addEventListener("click", function() {
+
+        const title = button.dataset.title;
+        const description = button.dataset.description;
+
+        // Link do próprio Cworld
+        const cworldUrl = window.location.origin;
+
+        if (navigator.share) {
+
+            navigator.share({
+                title: "Cworld",
+                text: `${title}\n\n${description}\n\nVeja mais no Cworld:`,
+                url: cworldUrl
+            })
+            .then(function() {
+                console.log("Notícia compartilhada!");
+            })
+            .catch(function(error) {
+
+                // O usuário simplesmente cancelou
+                if (error.name !== "AbortError") {
+                    console.log("Erro ao compartilhar:", error);
+                }
+
+            });
+
+        } else {
+
+            alert("Seu navegador não suporta compartilhamento.");
+
+        }
+
+    });
+
+});
